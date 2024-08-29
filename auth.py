@@ -4,14 +4,16 @@ from secrets import token_bytes
 from db import get_db_connection
 from sqlite3 import Row
 
+# security flaw: CWE-327: Use of a Broken or Risky Cryptographic Algorithm
+HASH_ALGORITHM = "md5"
 
 def hash_password(password: str) -> tuple[bytes, bytes]:
     salt = token_bytes(16)
-    hash = pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 100000)
+    hash = pbkdf2_hmac(HASH_ALGORITHM, password.encode("utf-8"), salt, 100000)
     return salt, hash
 
 def verify_password(password: str, salt: bytes, stored_hash: bytes) -> bool:
-    input_hash = pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 100000)
+    input_hash = pbkdf2_hmac(HASH_ALGORITHM, password.encode("utf-8"), salt, 100000)
     return compare_digest(stored_hash, input_hash)
 
 def create_user(name: str, password: str) -> None:
