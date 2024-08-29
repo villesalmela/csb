@@ -1,5 +1,6 @@
 import flask
 from flask import request, redirect, session, make_response
+from markupsafe import escape
 import db
 import auth
 from secrets import token_bytes
@@ -18,7 +19,10 @@ def index():
     content = "<h1>The Web Application</h1><br>"
     username = read_user()
     if username:
-        content += f"Hello, {username}!<br><a href='/profile'>Profile</a><br><a href='/logout'>Logout</a>"
+        content += f"""Hello, {username}!<br>
+        <a href='/profile'>Profile</a><br>
+        <a href='/admin'>Admin Panel</a><br>
+        <a href='/logout'>Logout</a>"""
     else:
         content += "Not logged in. <a href='/login'>Login</a>."
     return content
@@ -53,6 +57,17 @@ def profile():
     nickname = request.form["nickname"]
     db.save_nickname(username, nickname)
     return f"Saved. <a href='/'>Go back</a>."
+
+@app.route("/admin")
+def admin():
+    username = read_user()
+    if not username:
+        return "Not logged in. <a href='/login'>Login</a>."
+    if username != ADMIN_USERNAME:
+        return "Not authorized."
+    
+    # security flaw: CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
+    return "Admin panel.<br>List of profiles:<br>" + ", ".join(db.get_all_nicknames())
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
