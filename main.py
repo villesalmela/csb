@@ -18,7 +18,7 @@ def index():
     content = "<h1>The Web Application</h1><br>"
     username = read_user()
     if username:
-        content += f"Hello, {username}!"
+        content += f"Hello, {username}! <a href='/logout'>Logout</a>"
     else:
         content += "Not logged in. <a href='/login'>Login</a>."
     return content
@@ -51,6 +51,15 @@ def login():
     if auth.check_user(name, password):
         return set_user(name)
     return "Login failed. <a href='/'>Go back</a>."
+
+@app.route("/logout")
+def logout():
+    response = make_response(redirect("/"))
+
+    # security flaw: CWE-287: Improper Authentication
+    response.delete_cookie("logged_in_as")
+
+    return response
 
 
 if __name__ == "__main__":
