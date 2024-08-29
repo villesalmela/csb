@@ -1,6 +1,5 @@
 import sqlite3
 from pathlib import Path
-from contextlib import closing
 
 DB_PATH = Path("db.sqlite3")
 
@@ -9,10 +8,15 @@ def delete_db_file():
         DB_PATH.unlink()
 
 def get_db_connection():
-    return sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
 
 def create_db():
     delete_db_file()
-    with closing(get_db_connection()) as conn:
+    with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, password TEXT)")
+        cursor.execute(
+            "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, hash BLOB, salt BLOB)"
+        )
+    conn.close()
