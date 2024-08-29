@@ -5,8 +5,10 @@ import auth
 from secrets import token_bytes
 
 # insecure practice: CWE-798: Use of Hard-coded Credentials
-ADMIN_USERNAME = 'admin'
-ADMIN_PASSWORD = 'admin'
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "admin"
+USER_USERNAME = "user"
+USER_PASSWORD = "user"
 
 app = flask.Flask(__name__)
 app.secret_key = token_bytes(16)
@@ -54,4 +56,5 @@ def login():
 if __name__ == "__main__":
     db.create_db()
     auth.create_user(ADMIN_USERNAME, ADMIN_PASSWORD)
+    auth.create_user(USER_USERNAME, USER_PASSWORD)
     app.run()
