@@ -4,6 +4,7 @@ from uuid import uuid4
 import flask
 from flask import request, redirect, make_response
 from markupsafe import escape
+
 import db
 import auth
 import session
@@ -41,10 +42,11 @@ def set_user(username):
 
 def read_user():
 
-    ## security flaw: CWE-287: Improper Authentication
-    ## user-provided data is not validated before using
-    ## user should present a valid session id that is associated with the username
+    ## SECURITY FLAW 4: CWE-287 - Improper Authentication
+    ## PROBLEM: user-provided identity claim is not validated before using.
     username = request.cookies.get("logged_in_as")
+    ## SOLUTION: user should present a valid session id that is associated with the username.
+    ##           The session id is only set after a successful authentication.
     # session_id = request.cookies.get("session_id")
     # if not username or not session_id:
     #     return None
@@ -83,8 +85,9 @@ def profile():
             </form>
         """
     
-    ## security flaw: CWE-352: Cross-Site Request Forgery
-    ## csrf token is not validated before saving submitted data
+    ## SECURITY FLAW 1: CWE-352 - Cross-Site Request Forgery
+    ## PROBLEM: csrf token is not validated before saving submitted data.
+    ## SOLUTION: validate csrf token before saving submitted data.
     # if not check_csrf():
     #     return "CSRF token is invalid. <a href='/'>Go back</a>."
     nick = request.form["nickname"]
@@ -99,9 +102,10 @@ def admin():
     if username != ADMIN_USERNAME:
         return "Not authorized."
     
-    ## security flaw: CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
-    ## user-provided untrusted data is not escaped before rendering
+    ## SECURITY FLAW 3: CWE-79 - Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
+    ## PROBLEM: user-provided untrusted data is not escaped before rendering.
     nicknames = ", ".join(nickname.get_all_nicknames())
+    ## SOLUTION: escape user-provided data before rendering.
     # nicknames = escape(nicknames)
     return "Admin panel.<br>List of profiles:<br>" + nicknames
 

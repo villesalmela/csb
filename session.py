@@ -1,4 +1,5 @@
 from uuid import uuid4
+
 from db import get_db_connection
 
 def create_session(username):
