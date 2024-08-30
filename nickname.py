@@ -17,7 +17,7 @@ def get_nickname(username):
         )
         row = cursor.fetchone()
     conn.close()
-    return row["nickname"] if row else "Nickname"
+    return row["nickname"] if row else ""
 
 def get_all_nicknames():
     with get_db_connection() as conn:
