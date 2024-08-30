@@ -1,5 +1,7 @@
 from secrets import token_bytes
 from uuid import uuid4
+import json
+import time
 
 import flask
 from flask import request, redirect, make_response
@@ -10,6 +12,8 @@ import auth
 import session
 import nickname
 
+LOG_FILE = "requests.log"
+
 ## insecure practice: CWE-798: Use of Hard-coded Credentials
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin"
@@ -18,6 +22,22 @@ USER_PASSWORD = "user"
 
 app = flask.Flask(__name__)
 app.secret_key = token_bytes(16)
+
+@app.before_request
+def log_request():
+    data = {
+        "time": time.time(),
+        "method": request.method,
+        "path": request.path,
+        "form": dict(request.form),
+    }
+    ## SECURITY FLAW 5: CWE-532 - Insertion of Sensitive Information into Log File
+    ## PROBLEM: sensitive information is logged.
+    ## SOLUTION: remove sensitive information before logging.
+    # if data["path"] == "/login" and "password" in data["form"]:
+    #     data["form"]["password"] = "CENSORED"
+    with open(LOG_FILE, "a") as file:
+        file.write(json.dumps(data) + "\n")
 
 @app.route("/")
 def index():
