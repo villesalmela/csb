@@ -17,36 +17,15 @@ def create_db():
     with get_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, hash BLOB, salt BLOB)"
+            "CREATE TABLE users (name TEXT PRIMARY KEY, hash BLOB, salt BLOB)"
         )
         cursor.execute(
             "CREATE TABLE nicknames (username TEXT PRIMARY KEY, nickname TEXT)"
         )
-    conn.close()
-
-def save_nickname(username, nickname):
-    with get_db_connection() as conn:
-        cursor = conn.cursor()
         cursor.execute(
-            "INSERT OR REPLACE INTO nicknames (username, nickname) VALUES (?, ?)",
-            (username, nickname)
+            "CREATE TABLE sessions (username TEXT PRIMARY KEY, id UUID, token TEXT)"
         )
     conn.close()
 
-def get_nickname(username):
-    with get_db_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-            "SELECT nickname FROM nicknames WHERE username = ?", (username,)
-        )
-        nickname = cursor.fetchone()
-    conn.close()
-    return nickname["nickname"] if nickname else "Nickname"
 
-def get_all_nicknames():
-    with get_db_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM nicknames")
-        nicknames = cursor.fetchall()
-    conn.close()
-    return [f"{row["username"]}: {row["nickname"]}" for row in nicknames]
+

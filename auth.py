@@ -4,8 +4,10 @@ from secrets import token_bytes
 from db import get_db_connection
 from sqlite3 import Row
 
-# security flaw: CWE-327: Use of a Broken or Risky Cryptographic Algorithm
+## security flaw: CWE-327: Use of a Broken or Risky Cryptographic Algorithm
+## md5 is considered broken and should not be used
 HASH_ALGORITHM = "md5"
+# HASH_ALGORITHM = "sha256"
 
 def hash_password(password: str) -> tuple[bytes, bytes]:
     salt = token_bytes(16)
