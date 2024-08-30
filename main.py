@@ -84,7 +84,10 @@ def check_csrf():
         return False
     csrf_token = request.form.get("csrf_token")
     stored_token = session.get_csrf(session_id, username)
-    return stored_token == csrf_token if stored_token else False
+    result = stored_token == csrf_token if stored_token else False
+    if result:
+        session.delete_csrf(session_id, username)
+    return result
 
 def new_csrf():
     username = request.cookies.get("logged_in_as")

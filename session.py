@@ -47,3 +47,11 @@ def save_csrf(session_id, username, token):
             (username, session_id, token)
         )
     conn.close()
+
+def delete_csrf(session_id, username):
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE sessions SET token = NULL WHERE username = ? AND id = ?", (username, session_id)
+        )
+    conn.close()
