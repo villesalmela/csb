@@ -43,7 +43,7 @@ def save_csrf(session_id, username, token):
     with get_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT OR REPLACE INTO csrf (username, id, token) VALUES (?, ?, ?)",
+            "INSERT OR REPLACE INTO sessions (username, id, token) VALUES (?, ?, ?)",
             (username, session_id, token)
         )
     conn.close()
