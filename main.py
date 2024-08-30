@@ -66,6 +66,13 @@ def check_csrf():
     stored_token = session.get_csrf(session_id, username)
     return stored_token == csrf_token if stored_token else False
 
+def new_csrf():
+    username = request.cookies.get("logged_in_as")
+    session_id = request.cookies.get("session_id")
+    csrf_token = uuid4().hex
+    session.save_csrf(session_id, username, csrf_token)
+    return csrf_token
+
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
     username = read_user()
@@ -73,16 +80,16 @@ def profile():
         return "Not logged in. <a href='/login'>Login</a>."
     if request.method == "GET":
         existing_nickname = nickname.get_nickname(username)
-        csrf_token = uuid4().hex
-        session_id = request.cookies.get("session_id")
-        session.save_csrf(session_id, username, csrf_token)
+        csrf_token = new_csrf()
         return f"""
             <h1>Profile of {username}</h1>
+            Current nickname: {escape(existing_nickname)}<br>
             <form method="post">
-                <input type="text" name="nickname" placeholder="{existing_nickname}">
+                <input type="text" name="nickname" placeholder="Nickname">
                 <input type="submit" value="Save">
                 <input type="hidden" name="csrf_token" value="{csrf_token}">
             </form>
+            <a href='/'>Go back</a>.
         """
     
     ## SECURITY FLAW 1: CWE-352 - Cross-Site Request Forgery
@@ -100,14 +107,14 @@ def admin():
     if not username:
         return "Not logged in. <a href='/login'>Login</a>."
     if username != ADMIN_USERNAME:
-        return "Not authorized."
+        return "Not authorized. <a href='/'>Go back</a>."
     
     ## SECURITY FLAW 3: CWE-79 - Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
     ## PROBLEM: user-provided untrusted data is not escaped before rendering.
     nicknames = ", ".join(nickname.get_all_nicknames())
     ## SOLUTION: escape user-provided data before rendering.
     # nicknames = escape(nicknames)
-    return "Admin panel.<br>List of profiles:<br>" + nicknames
+    return "<h1>Admin panel</h1>List of profiles:<br>" + nicknames + "<br><a href='/'>Go back</a>."
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
