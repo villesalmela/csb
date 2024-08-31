@@ -34,8 +34,8 @@ def log_request():
     ## SECURITY FLAW 5: CWE-532 - Insertion of Sensitive Information into Log File
     ## PROBLEM: sensitive information is logged.
     ## SOLUTION: remove sensitive information before logging.
-    # if data["path"] == "/login" and "password" in data["form"]:
-    #     data["form"]["password"] = "CENSORED"
+    if data["path"] == "/login" and "password" in data["form"]:
+        data["form"]["password"] = "CENSORED"
     with open(LOG_FILE, "a") as file:
         file.write(json.dumps(data) + "\n")
 
