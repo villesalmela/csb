@@ -67,7 +67,7 @@ A malicious user could browse to `/profile` page and set their nickname as `<scr
 If untrusted data is rendered on a page, it is first escaped, turning all the content into text that will not execute.
 Normally web application frameworks handle this automatically if using page templates, but it can also be done more manually, like in this solution.
 
-### Security Flaw 4: [A07:2021 – Identification and Authentication Failures](https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/)
+### Security Flaw 4: [A07:2021 – Identification and Authentication Failures](https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/)  
 Related weakness: [CWE-287: Improper Authentication](https://cwe.mitre.org/data/definitions/287.html)
 Location: [aa4f147](https://github.com/villesalmela/csb/commit/aa4f1471b331cc822edada2904dc7c493e744bb1)
 
@@ -80,7 +80,7 @@ An attacker could manually insert a cookie `logged_in_as` to value `admin`, to g
 During the login process, the user is authenticated by verifying that they have access to the correct password. Only if this authentication is successful, a random session ID is generated and associated with the username, and both are saved to the server-side database. The user will receive this session ID to keep in their cookies. Now whenever a user claims to have some identity, they must also provide a session ID. The fixed application will check if the session ID & username combination can be found in the serverside database. If a match is found, it indicates that the user has already proved their identity during login.
 
 ### Security Flaw 5: [A09:2021 – Security Logging and Monitoring Failures](https://owasp.org/Top10/A09_2021-Security_Logging_and_Monitoring_Failures/)
-Related weakness: [CWE-532: Insertion of Sensitive Information into Log File](https://cwe.mitre.org/data/definitions/532.html)
+Related weakness: [CWE-532: Insertion of Sensitive Information into Log File](https://cwe.mitre.org/data/definitions/532.html)  
 Location: [d1cf50a](https://github.com/villesalmela/csb/commit/d1cf50a5eeb8eecfc5e0f7c3e081c9ab9c302733)
 
 #### Problem
