@@ -118,8 +118,8 @@ def profile():
     ## SECURITY FLAW 1: CWE-352 - Cross-Site Request Forgery
     ## PROBLEM: csrf token is not validated before saving submitted data.
     ## SOLUTION: validate csrf token before saving submitted data.
-    # if not check_csrf():
-    #     return "CSRF token is invalid. <a href='/'>Go back</a>."
+    if not check_csrf():
+        return "CSRF token is invalid. <a href='/'>Go back</a>."
     nick = request.form["nickname"]
     nickname.save_nickname(username, nick)
     return f"Saved. <a href='/'>Go back</a>."
