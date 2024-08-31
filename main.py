@@ -136,7 +136,7 @@ def admin():
     ## PROBLEM: user-provided untrusted data is not escaped before rendering.
     nicknames = ", ".join(nickname.get_all_nicknames())
     ## SOLUTION: escape user-provided data before rendering.
-    # nicknames = escape(nicknames)
+    nicknames = escape(nicknames)
     return "<h1>Admin panel</h1>List of profiles:<br>" + nicknames + "<br><a href='/'>Go back</a>."
 
 @app.route("/login", methods=["GET", "POST"])
