@@ -7,9 +7,9 @@ from db import get_db_connection
 
 ## SECURITY FLAW 2: CWE-327 - Use of a Broken or Risky Cryptographic Algorithm
 ## PROBLEM: md5 is considered broken and should not be used.
-HASH_ALGORITHM = "md5"
+# HASH_ALGORITHM = "md5"
 ## SOLUTION: use a more secure hashing algorithm, such as sha256.
-# HASH_ALGORITHM = "sha256"
+HASH_ALGORITHM = "sha256"
 
 def hash_password(password: str) -> tuple[bytes, bytes]:
     salt = token_bytes(16)
