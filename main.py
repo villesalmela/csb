@@ -67,14 +67,14 @@ def read_user():
     username = request.cookies.get("logged_in_as")
     ## SOLUTION: user should present a valid session id that is associated with the username.
     ##           The session id is only set after a successful authentication.
-    # session_id = request.cookies.get("session_id")
-    # if not username or not session_id:
-    #     return None
-    # stored_session_id = session.get_session_id(username)
-    # if not stored_session_id:
-    #     return None
-    # if session_id != str(stored_session_id):
-    #     return None
+    session_id = request.cookies.get("session_id")
+    if not username or not session_id:
+        return None
+    stored_session_id = session.get_session_id(username)
+    if not stored_session_id:
+        return None
+    if session_id != str(stored_session_id):
+        return None
     return username
 
 def check_csrf():
