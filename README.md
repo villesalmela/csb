@@ -67,8 +67,8 @@ A malicious user could browse to `/profile` page and set their nickname as `<scr
 If untrusted data is rendered on a page, it is first escaped, turning all the content into text that will not execute.
 Normally web application frameworks handle this automatically if using page templates, but it can also be done more manually, like in this solution.
 
-### Security Flaw 4: [A07:2021 – Identification and Authentication Failures](https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/)  
-Related weakness: [CWE-287: Improper Authentication](https://cwe.mitre.org/data/definitions/287.html)
+### Security Flaw 4: [A07:2021 – Identification and Authentication Failures](https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/)
+Related weakness: [CWE-287: Improper Authentication](https://cwe.mitre.org/data/definitions/287.html)  
 Location: [aa4f147](https://github.com/villesalmela/csb/commit/aa4f1471b331cc822edada2904dc7c493e744bb1)
 
 #### Problem
