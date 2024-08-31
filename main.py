@@ -54,10 +54,10 @@ def index():
 
 def set_user(username):
     response = make_response(redirect("/"))
-    response.set_cookie("logged_in_as", username, httponly=True, samesite="Strict")
+    response.set_cookie("logged_in_as", username)
     session.create_session(username)
     session_id = str(session.get_session_id(username))
-    response.set_cookie("session_id", session_id, httponly=True, samesite="Strict")
+    response.set_cookie("session_id", session_id)
     return response
 
 def read_user():
